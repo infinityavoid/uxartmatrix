@@ -152,6 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 filterSelectContainer.style.height = 0 + 'px';
             }
         });
+        
         window.addEventListener('resize', ()=>{
             if(filterSelectContainer.style.height !== '0px') {
                 filterSelectContainer.style.height = filterSelectOptions.clientHeight + margin + 'px';
