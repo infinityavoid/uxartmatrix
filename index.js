@@ -67,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const initScrollContainer = () => {
         const matrixContainer = document.querySelector('.matrix__container')
-        const matrixScrollContainer = document.querySelector('.matrix__scroll-container')
+        const matrixTitleWrap = document.querySelector('.title-wrap')
+        const matrixBodyWrap = document.querySelector('.body-wrap')
         const leftBtn = matrixContainer.querySelector('.matrix__swipe-left-btn')
         const rightBtn = matrixContainer.querySelector('.matrix__swipe-right-btn')
 
@@ -76,15 +77,15 @@ document.addEventListener('DOMContentLoaded', function () {
         leftBtn.style.top = startBtnOffset + 'px'
         rightBtn.style.top = startBtnOffset + 'px'
 
-        let scrollAmount = matrixScrollContainer.scrollWidth / 8;
+        let scrollAmount = matrixBodyWrap.scrollWidth / 8;
 
         const updateButtonVisibility = () => {
-            if (matrixScrollContainer.scrollLeft === 0) {
+            if (matrixBodyWrap.scrollLeft === 0) {
                 leftBtn.classList.remove('visible')
             } else {
                 leftBtn.classList.add('visible')
             }
-            if (Math.abs(matrixScrollContainer.scrollWidth - matrixScrollContainer.clientWidth - matrixScrollContainer.scrollLeft) < 1) {
+            if (Math.abs(matrixBodyWrap.scrollWidth - matrixBodyWrap.clientWidth - matrixBodyWrap.scrollLeft) < 1) {
                 rightBtn.classList.remove('visible')
             } else {
                 rightBtn.classList.add('visible')
@@ -92,14 +93,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         leftBtn.onclick = () => {
-            matrixScrollContainer.scrollLeft -= scrollAmount;
+            matrixBodyWrap.scrollLeft -= scrollAmount;
+            matrixTitleWrap.scrollLeft -=scrollAmount;
             setTimeout(() => {
                 updateButtonVisibility();
             }, 350)
         };
 
         rightBtn.onclick = () => {
-            matrixScrollContainer.scrollLeft += scrollAmount;
+            matrixBodyWrap.scrollLeft += scrollAmount;
+            matrixTitleWrap.scrollLeft +=scrollAmount;
             setTimeout(() => {
                 updateButtonVisibility();
             }, 350)
@@ -181,10 +184,38 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const initLevelButtons = () => {
+        const buttons = document.querySelectorAll('.matrix__level-control');
+        buttons.forEach((el)=>{
+            el.addEventListener('click', ()=> {
+                el.classList.toggle('active')
+                if(el.dataset.level === '1'){
+                    let accordions = document.querySelectorAll('.matrix__accordion')
+                    if(el.classList.contains('active')){
+                        accordions.forEach(el=> el.classList.remove('active'))
+                    }
+                    else {
+                        accordions.forEach(el=> el.classList.add('active'))
+                    }
+                }
+                if(el.dataset.level === '2'){
+                    let accordions = document.querySelectorAll('.matrix__nested-accordion')
+                    if(el.classList.contains('active')){
+                        accordions.forEach(el=> el.classList.remove('active'))
+                    }
+                    else {
+                        accordions.forEach(el=> el.classList.add('active'))
+                    }
+                }
+            })
+        })
+    }
+
     initLegendPopup();
     initExtendSwitch();
     initAccordions();
     initScrollContainer();
     initFilterSelect();
     initTags();
+    initLevelButtons();
 });
